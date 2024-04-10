@@ -49,7 +49,21 @@ Pre-trained models are quite large >2GB. We need to apply this for both German a
 
 Training name_en might not work in this case since we do not have enough data.
 
-<font color="yellow">
+<font color="yellow">Open issues</font>
+
 For South Tyrol is the default name more likely to be in German or Italian? This might pose a challenge for a bilingual region
 such as South Tyrol. Should a mixture be used?
-</font>
+
+For OSM data there is an issue of the presence of name, name_de, name_it or a combination thereof.
+
+For example for osm_id, node=2442568856
+- name=Kindergarten Arcobaleno - Scuola Materna Arcobaleno
+- name_de=Kindergarten Arcobaleno
+- name_it=Scuola Materna Arcobaleno
+
+whereas for osm_id, node=5470887522
+- name=Scuola materna “Biancaneve”
+- name_de=Kindergarten Biancaneve
+- name_it=""
+
+Missing data in one language or the other can be random.
