@@ -1,24 +1,21 @@
-# %%
-%edit
-%load_ext autoreload
-%autoreload 2
+import sys
+import os
 
-# %%
-import pickle
-import torch
-from collections import OrderedDict, defaultdict
-import random
-import json
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-import numpy as np
+# Add the parent directory of the script to the Python path
+sys.path.append(os.path.dirname(script_dir))
 
-
+import pandas as pd
 from space2vec.SpatialRelationEncoder import *
 from space2vec.module import *
 from space2vec.data_utils import *
 from space2vec.utils import *
+from geometry_to_ndarray import read_geometry_to_numpy
 
-# %%
+# TODO: Choice of spa_embed_dim arbitrary
+# TODO: Definitions of the spatial encoder parameters must be revised
 params = {
     'spa_enc_type': 'gridcell',
     'spa_embed_dim': 64,
@@ -57,43 +54,31 @@ spa_enc = get_spa_encoder(
     use_postmat = params['spa_enc_use_postmat'],
     device = params['device']).to(params['device'])
 
-# %%
-batch_size, num_context_pts, coord_dim = 10, 1, 2
-coords = np.random.rand(batch_size, num_context_pts, coord_dim)
+# %% Read the geometry data from the database
+coords, osm_id = read_geometry_to_numpy(
+    host="host.docker.internal",
+    database="sudtirol_db",
+    user="citydb",
+    password="citydb",
+    port=7777,
+    table_name="entities",
+    geometry_column="centroid_or_point",
+    id_column="osm_id"
+)
 
-# Set slqalchemy engine for connection to PostgreSQL
-db_iri = f'postgresql://citydb:citydb@host.docker.internal:7777/sudtirol_db'
-engine = sqlalchemy.create_engine(db_iri)
-
-# Connect to the database
-conn = engine.connect()
-cur = conn.cursor()
-
-# Execute the SQL query to fetch the geometries
-cur.execute("SELECT geom FROM entities;")
-result = cur.fetchall()
-
-# Initialize an empty list to store the coordinates
-coordinates = []
-
-# Iterate over the result set and extract the coordinates
-for row in result:
-    point = row[0]  # Assuming the geometry column is the first column
-    x, y = point.x, point.y
-    coordinates.append([x, y])
-
-# Convert the list of coordinates to a NumPy array with shape (?, 1, 2)
-#coords = np.array(coordinates).reshape(?, 1, 2)
-
-# Close the database connection
-cur.close()
-conn.close()
-
-# Push to database; keep index as id for new class
-#result.to_sql("citygml_osm_association", engine, if_exists='append', index=False)
-
-
-# %%
+# %% Generate the space2vec embeddings
 
 spa_embeds = spa_enc(coords)
+
+df = pd.DataFrame({
+    'osm_id': osm_id,
+    'embeddings': [arr.squeeze(1).detach().numpy() for arr in spa_embeds]
+})
+
+# Save the DataFrame to a text file
+df.to_csv('space2vec_embeddings.txt', index=False)
+
+
+
+
 

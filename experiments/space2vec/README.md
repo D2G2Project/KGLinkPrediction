@@ -31,6 +31,17 @@ The official repository is ```https://github.com/gengchenmai/space2vec``` but,
 The code used is taken from the respective repository with a sample demo: Gengchen Mai, space2vec_demo, (2020), GitHub repository,
 ```https://github.com/gengchenmai/space2vec_demo```.
 
+<font color="yellow">
+Current open issues:
+
+- Parameters used by space2vec for the model are not stated in the paper and the gitub repo is offline.
+  - What is the dimension of the encoded vector?
+- Space2Vec is a POINT encoder. Currently using the centroid of the polygons and linestrings.
+  - Is this a good approximation?
+- What will be the output? A vector for each osm_id? It will need to be merged back with the ttl file.
+
+</font>
+
 #### Encoder 2 - Fasttext
 Fasttext is used to encode the textual data. The official website is https://fasttext.cc/docs/en/crawl-vectors.html.
 
@@ -38,5 +49,7 @@ Pre-trained models are quite large >2GB. We need to apply this for both German a
 
 Training name_en might not work in this case since we do not have enough data.
 
-TODO: Check whether the default name is more likely to be in German or Italian. This might pose a challenge for a bilingual region
-such as South Tyrol.
+<font color="yellow">
+For South Tyrol is the default name more likely to be in German or Italian? This might pose a challenge for a bilingual region
+such as South Tyrol. Should a mixture be used?
+</font>

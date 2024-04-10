@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   pgsql:
-    container_name: pgsql_misc
+    container_name: pgsql
     build: ./pgsql
     #env_file: .env
     ports:
@@ -24,7 +24,7 @@ services:
 
   # Add table with all OSM points of interest
   osm2pgsql:
-    container_name: osm2pgsql_misc
+    container_name: osm2pgsql
     build:
       context: osm2pgsql/
     command: bash -c "sleep 5; /usr/local/bin/osm-importer.sh"
@@ -37,14 +37,14 @@ services:
       REGION: europe/italy/nord-est
     depends_on:
       pgsql:
-        condition: service_completed_successfully
+        condition: service_healthy
     networks:
       - citydb-net
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   db-edit:
-    container_name: db-edit_misc
+    container_name: db-edit
     build:
       context: db-edit/
     depends_on:
@@ -59,14 +59,14 @@ services:
     container_name: encoder
     build:
       context: encoder
-    depends_on:
-      db-edit:
-        condition: service_completed_successfully
+#    depends_on:
+#      db-edit:
+#        condition: service_completed_successfully
     networks:
       - citydb-net
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      -
+
 #  ontop-materialize-abox:
 #    image: ontop/ontop:5.1.1
 #    command: [ "ontop", "materialize", "-f", "turtle", "--output", "/opt/ontop/input/materialized-triples.ttl" ]

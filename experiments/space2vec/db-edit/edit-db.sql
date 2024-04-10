@@ -320,15 +320,16 @@ DROP TABLE planet_osm_ways;
 DROP TABLE planet_osm_rels;
 
 -- Fix osm_id type in entities table
+-- INTEGER type can be out of range, BIGINT needed
 ALTER TABLE entities
-ALTER COLUMN osm_id TYPE INTEGER USING osm_id::NUMERIC;
+ALTER COLUMN osm_id TYPE BIGINT USING osm_id::BIGINT;
 
 
 -- Add centroid_or_point column to entities table
-ALTER TABLE your_table
+ALTER TABLE entities
     ADD COLUMN centroid_or_point GEOMETRY(POINT, 4326);
 
-UPDATE your_table
+UPDATE entities
 SET centroid_or_point = CASE
                             WHEN GeometryType(geom) = 'POINT' THEN geom
                             ELSE ST_Centroid(geom)

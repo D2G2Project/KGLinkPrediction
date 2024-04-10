@@ -1,2 +1,4 @@
 fasttext
-pytorch
+pandas
+sqlalchemy
+psycopg2
