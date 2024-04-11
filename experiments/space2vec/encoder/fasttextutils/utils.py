@@ -26,7 +26,7 @@ def get_column_embeddings(host, database, user, password, port, table_name, id_c
     cur = conn.cursor()
 
     # Fetch the column data from the PostgreSQL table
-    cur.execute(f"SELECT {id_column}, {column_name} FROM {table_name}")
+    cur.execute(f"SELECT {id_column}, {column_name} FROM {table_name} LIMIT 10")
 
     # Fetch all the rows
     rows = cur.fetchall()

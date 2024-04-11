@@ -61,7 +61,7 @@ coords, osm_id = read_geometry_to_numpy(
     user="citydb",
     password="citydb",
     port=7777,
-    table_name="entities",
+    table_name="public.entities",
     geometry_column="centroid_or_point",
     id_column="osm_id"
 )

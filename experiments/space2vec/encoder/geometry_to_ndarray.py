@@ -31,7 +31,7 @@ def read_geometry_to_numpy(host, database, user, password, port, table_name, geo
     cur = conn.cursor()
 
     # Execute a SQL query to retrieve the geometry column and the id column
-    cur.execute(f"SELECT {id_column}, ST_X({geometry_column}), ST_Y({geometry_column}) FROM {table_name}")
+    cur.execute(f"SELECT {id_column}, ST_X({geometry_column}), ST_Y({geometry_column}) FROM {table_name} LIMIT 100")
 
     # Fetch all the rows
     rows = cur.fetchall()
