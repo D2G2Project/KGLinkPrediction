@@ -62,6 +62,10 @@ services:
     depends_on:
       db-edit:
         condition: service_completed_successfully
+    volumes:
+      - type: bind
+        source: ./output
+        target: /code/output
     networks:
       - citydb-net
     extra_hosts:

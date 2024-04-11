@@ -1,6 +1,7 @@
 # utils.py
 import numpy as np
 import psycopg2
+import csv
 
 def get_column_embeddings(host, database, user, password, port, table_name, id_column, column_name, model):
     """
@@ -29,13 +30,9 @@ def get_column_embeddings(host, database, user, password, port, table_name, id_c
 
     # Fetch all the rows
     rows = cur.fetchall()
-    id_values = np.zeros(len(rows), dtype=int)
-    # Populate the ndarray and the id_values array
-    for i, row in enumerate(rows):
-        id_values[i] = row[0]  # Store the id value
 
-
-    column_data = [row[0] for row in cur.fetchall()]
+    # Unpack the rows into separate lists
+    id_values, column_data = zip(*rows)
 
     # Get the embeddings for the column
     embeddings = []
@@ -43,5 +40,30 @@ def get_column_embeddings(host, database, user, password, port, table_name, id_c
         embedding = model.get_sentence_vector(text)
         embeddings.append(embedding)
 
-    conn.close()
-    return np.array(embeddings), id_values
+    # Create the final dictionary
+    # Create the dictionary
+    id_embedding_dict = {
+        'ids': np.array(id_values),
+        'embeddings': np.array(embeddings)
+    }
+
+    return id_embedding_dict
+
+def write_dict_to_csv(output_file, id_embedding_dict):
+    """
+    Writes the contents of the given dictionary to a CSV file.
+
+    Args:
+        output_file (str): The name of the output CSV file.
+        id_embedding_dict (dict): A dictionary containing the IDs and embeddings.
+    """
+    with open(output_file, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+
+        # Write the header row
+        writer.writerow(['id'] + [f'embedding_{i}' for i in range(len(id_embedding_dict['embeddings'][0]))])
+
+        # Write the data rows
+        for id_value, embedding in zip(id_embedding_dict['ids'], id_embedding_dict['embeddings']):
+            row = [id_value] + list(embedding)
+            writer.writerow(row)

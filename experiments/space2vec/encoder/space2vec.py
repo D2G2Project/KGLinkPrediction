@@ -76,7 +76,7 @@ df = pd.DataFrame({
 })
 
 # Save the DataFrame to a text file
-df.to_csv('space2vec_embeddings.txt', index=False)
+df.head().to_csv('output/space2vec_embeddings.csv', index=False)
 
 
 

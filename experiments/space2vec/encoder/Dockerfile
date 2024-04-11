@@ -1,9 +1,11 @@
 FROM python:3.10-bullseye
 
-# Add the 'space2vec' directory to the Python path
-ENV PYTHONPATH="${PYTHONPATH}:/space2vec"
+# Add the 'space2vec' and 'fasttextutils' directories to the Python path
+ENV PYTHONPATH="${PYTHONPATH}:/space2vec:/fasttextutils"
 
 WORKDIR /code
+# Folder where to store the output
+RUN mkdir output
 
 RUN apt-get update && apt-get install -y binutils libproj-dev gdal-bin libgdal-dev
 
@@ -18,4 +20,9 @@ ADD space2vec.py .
 ADD geometry_to_ndarray.py .
 ADD space2vec /code/space2vec
 
-CMD ["python", "space2vec.py"]
+# Add the fasttext.py file and the fasttextutils folder
+ADD fasttext.py .
+ADD fasttextutils /code/fasttextutils
+ADD output /code/output
+
+CMD ["python", "space2vec.py", "fasttext.py"]
