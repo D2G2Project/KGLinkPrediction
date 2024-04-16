@@ -4,6 +4,21 @@ This section tries to apply part of the WorldKG algorithm, in
 particular its encoder and framework. The target dataset and the type
 of data analyzed e.g. CityGML changes. 
 
+### Execute pipeline
+
+Download the pretrained language models cc.de.300.bin and cc.it.300.bin from https://fasttext.cc/docs/en/crawl-vectors.html.
+Place them in the fattextutils directory.
+
+Keep port 7777 open for PostgreSQL.
+```
+docker-compose -f docker-compose.space2vec.yml up
+```
+
+The model will generate txt files with embedding for 1) space2vec and 2) fasttext German 3) fasttext Italian.
+
+For simplicity, the model is run on a small subset of the data. In order to run more data please modify the following files:
+- geometry_to_ndarray.py --> change the number of rows to be read from the SQL table. Currently LIMIT 100.
+- fasttextutils.utils.py --> change the number of rows to be read from the SQL table. Currently LIMIT 10.
 
 ### Pipeline
 1. Data Preprocessing
