@@ -1,0 +1,4 @@
+pyrosm
+shapely
+sqlalchemy
+psycopg2

@@ -1,33 +1,3 @@
--- Add official Italian Public Administration data
-ALTER TABLE municipalities
-    ADD COLUMN istat_code_controlled TEXT;
-
-WITH latest_istat_updates AS (
-    SELECT DISTINCT ON (istat_code)
-    *
-FROM controlled_istat_codes
-ORDER BY istat_code, date_last_change DESC)
-UPDATE municipalities
-SET istat_code_controlled=latest_istat_updates.controlled_istat_code
-    FROM latest_istat_updates
-WHERE municipalities.istat_code=latest_istat_updates.istat_code;
-
--- istat_controlled is the new municipalities PK
-alter table municipalities
-    drop constraint municipalities_pkey;
-
-alter table municipalities
-    add unique (ogc_fid);
-
-alter table municipalities
-    add constraint municipalities_pk
-        unique (istat_code_controlled);
-
-alter table municipalities
-    add constraint municipalities_pk
-        primary key (istat_code_controlled);
-
-
 -- Add table with LGD classes and class id-s
 ALTER TABLE public.classes DROP COLUMN id;
 INSERT INTO public.classes VALUES
@@ -351,4 +321,42 @@ DROP TABLE planet_osm_rels;
 
 -- Fix osm_id type in entities table
 ALTER TABLE entities
-ALTER COLUMN osm_id TYPE INTEGER USING osm_id::NUMERIC;
+ALTER COLUMN osm_id TYPE INTEGER USING osm_id::BIGINT;
+
+
+-- TASK: Split map into polygons
+-- Add osmgrid_id to entities table
+-- Every node is mapped to a grid polygon cell
+ALTER TABLE entities ADD COLUMN osmgrid_id INT;
+
+UPDATE entities t1
+SET osmgrid_id = (
+    SELECT t2.id
+    FROM osm_grid_polygons t2
+    WHERE ST_Within(t1.geom, t2.geometry)
+      AND t1.osm_type='N'
+    LIMIT 1
+    );
+
+
+
+-- TASK: Add brands table
+CREATE TABLE brands (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT,
+                        class INTEGER
+);
+
+INSERT INTO brands VALUES (1, 'Aldi', 233),
+                          (2, 'Coop', 233),
+                          (3, 'Despar', 233),
+                          (4, 'Eurospin', 233),
+                          (5, 'Eurospar', 233),
+                          (6, 'MD', 233),
+                          (7, 'MPREIS', 233),
+                          (8, 'CONAD', 233),
+                          (9, 'Poli', 233),
+                          (10, 'Lidl', 233),
+                          (11, 'Imbiss', 103),
+                          (12, 'McDonalds', 103),
+                          (13, 'Subway', 103)
