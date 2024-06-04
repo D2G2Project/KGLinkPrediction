@@ -360,3 +360,15 @@ INSERT INTO brands VALUES (1, 'Aldi', 233),
                           (11, 'Imbiss', 103),
                           (12, 'McDonalds', 103),
                           (13, 'Subway', 103)
+
+
+
+-- TASK: Add brands to entities, match brand name
+ALTER TABLE entities ADD COLUMN brand_id INTEGER;
+
+UPDATE entities t1
+SET brand_id = t2.id
+    FROM brands t2
+WHERE t1.name ILIKE '%' || t2.name || '%'
+  AND t1.class::INTEGER = t2.class;
+

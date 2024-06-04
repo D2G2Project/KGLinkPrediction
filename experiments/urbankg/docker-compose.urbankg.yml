@@ -42,10 +42,10 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  db-edit:
-    container_name: db-edit_misc
+  grid-construction:
+    container_name: grid-construction
     build:
-      context: db-edit/
+      context: inputprep/
     depends_on:
       osm2pgsql:
         condition: service_completed_successfully
@@ -54,12 +54,12 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  grid-construction:
-    container_name: grid-construction
+  db-edit:
+    container_name: db-edit_misc
     build:
-      context: inputprep/
+      context: db-edit/
     depends_on:
-      db-edit:
+      grid-construction:
         condition: service_completed_successfully
     networks:
       - citydb-net
