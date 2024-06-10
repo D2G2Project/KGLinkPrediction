@@ -321,13 +321,13 @@ DROP TABLE planet_osm_rels;
 
 -- Fix osm_id type in entities table
 ALTER TABLE entities
-ALTER COLUMN osm_id TYPE INTEGER USING osm_id::BIGINT;
+ALTER COLUMN osm_id TYPE BIGINT USING osm_id::BIGINT;
 
 
 -- TASK: Split map into polygons
 -- Add osmgrid_id to entities table
 -- Every node is mapped to a grid polygon cell
-ALTER TABLE entities ADD COLUMN osmgrid_id INT;
+ALTER TABLE entities ADD COLUMN osmgrid_id INTEGER;
 
 UPDATE entities t1
 SET osmgrid_id = (
@@ -359,7 +359,7 @@ INSERT INTO brands VALUES (1, 'Aldi', 233),
                           (10, 'Lidl', 233),
                           (11, 'Imbiss', 103),
                           (12, 'McDonalds', 103),
-                          (13, 'Subway', 103)
+                          (13, 'Subway', 103);
 
 
 
