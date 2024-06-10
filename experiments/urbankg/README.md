@@ -23,6 +23,18 @@ The area chosen for the analysis is Bolzano, South Tyrol.
 
 
 #### Create classes of brands
+Only focus on a set of Amenities
 - Supermarkets
 - FastFood
-- ???
+- Bakery
+- Bar
+- Banks
+- Shops
+  - ApplianceShop
+  - ElectronicsShop
+  - Computer
+  - SportShop
+- Cafe
+- Hairdresser
+- Pharmacy
+- Restaurant

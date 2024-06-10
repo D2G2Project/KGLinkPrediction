@@ -69,7 +69,6 @@ local orderedList = {
     "AntiquesShop",
     "ApartmentBuilding",
     "ApplianceShop",
-    "ArtShop",
     "ArtsCentre",
     "ArtShop",
     "Artwork",

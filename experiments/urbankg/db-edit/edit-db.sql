@@ -8,7 +8,6 @@ INSERT INTO public.classes VALUES
                                ('AntiquesShop'),
                                ('ApartmentBuilding'),
                                ('ApplianceShop'),
-                               ('ArtShop'),
                                ('ArtsCentre'),
                                ('ArtShop'),
                                ('Artwork'),
@@ -359,11 +358,24 @@ INSERT INTO brands VALUES (1, 'Aldi', 233),
                           (10, 'Lidl', 233),
                           (11, 'Imbiss', 103),
                           (12, 'McDonalds', 103),
-                          (13, 'Subway', 103);
+                          (13, 'Subway', 103),
+                          (14, 'Sparkasse', 17),
+                          (15, 'BNL', 17),
+                          (16, 'Intesa Sanpaolo', 17),
+                          (17, 'Raiffeisen', 17),
+                          (18, 'UniCredit', 17),
+                          (19, 'Volksbank', 17),
+                          (20, 'Franziskaner', 16),
+                          (21, 'Grandi', 16),
+                          (22, 'Lemayr', 16),
+                          (23, 'Hackhofer', 16),
+                          (24, 'Trenker', 16),
+                          (25, 'Sportler', 16);
 
 
 
--- TASK: Add brands to entities, match brand name
+
+-- TASK: Add brands to entities, match brand name for common brands
 ALTER TABLE entities ADD COLUMN brand_id INTEGER;
 
 UPDATE entities t1
@@ -372,3 +384,17 @@ SET brand_id = t2.id
 WHERE t1.name ILIKE '%' || t2.name || '%'
   AND t1.class::INTEGER = t2.class;
 
+
+-- Add any remaining brands for set of classes
+WITH other_brands AS (
+    SELECT
+        name, class::INTEGER,
+            ROW_NUMBER() OVER (ORDER BY name) + (SELECT MAX(id) FROM brands) AS new_id
+    FROM entities
+    WHERE name IS NOT NULL
+      AND class IN ('7', '15', '16', '17', '52', '77', '97', '102', '125', '185', '208', '226', '232')
+      AND (brand_id IS NULL)
+)
+INSERT INTO brands (id, name, class)
+SELECT new_id, name, class
+FROM other_brands;
