@@ -32,7 +32,7 @@ source		SELECT "id"
 ; POI
 
 mappingId	POI
-target		:poi/{"osm_id"} a d2g2:POI ; d2g2:rel_brandof {"brand_id"} ; d2g2:simpoi {osm_id} ; d2g2:competitive {osm_id} .
+target		:poi/{"osm_id"} a d2g2:POI ; d2g2:rel_brandof {"brand_id"} ; d2g2:simpoi {"osm_id"} ; d2g2:competitive {"osm_id"} .
 source		SELECT "osm_id", "brand_id"
 			FROM "entities"
 ]]

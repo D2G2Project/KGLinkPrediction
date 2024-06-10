@@ -398,3 +398,25 @@ WITH other_brands AS (
 INSERT INTO brands (id, name, class)
 SELECT new_id, name, class
 FROM other_brands;
+
+-- Update entities with new brand_id
+UPDATE entities t1
+SET brand_id = t2.id
+    FROM brands t2
+WHERE t1.name= t2.name
+  AND t1.brand_id IS NULL;
+
+
+-- Add borderby table for bordering regions
+CREATE TABLE borderby_table (
+                    id1 INT,
+                    id2 INT,
+                    borderby BOOLEAN
+);
+
+-- Insert the pairs of IDs from t1 where geometries touch each other
+INSERT INTO borderby_table (id1, id2, borderby)
+SELECT a.id AS id1, b.id AS id2, TRUE AS borderby
+FROM osm_grid_polygons a
+         JOIN osm_grid_polygons b ON ST_Touches(a.geometry, b.geometry)
+WHERE a.id < b.id; -- To avoid duplicate pairs and self-joins

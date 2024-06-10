@@ -66,26 +66,28 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  #TODO: Do we want to materialize TBox as well?
-#  ontop-materialize-abox:
-#    image: ontop/ontop:5.1.1
-#    command: [ "ontop", "materialize", "-f", "turtle", "--output", "/opt/ontop/input/materialized-triples.ttl" ]
-#    environment:
-#      #ONTOP_ONTOLOGY_FILE: /opt/ontop/input/urbankg.owl
-#      ONTOP_XML_CATALOG_FILE: /opt/ontop/input/catalog-v001.xml
-#      ONTOP_MAPPING_FILE: /opt/ontop/input/urbankg-test1.obda
-#      ONTOP_PROPERTIES_FILE: /opt/ontop/input/urbankg.properties
-#      ONTOP_LOG_LEVEL: "debug"
-#    volumes:
-#      - ./vkg:/opt/ontop/input
-#      - ./jdbc:/opt/ontop/jdbc
-#    depends_on:
-#      db-edit:
-#        condition: service_completed_successfully
-#    ports:
-#      - "8082:8080"
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
+  ontop-materialize-abox:
+    image: ontop/ontop:5.1.1
+    command: [ "ontop", "materialize", "-f", "turtle", "--output", "/opt/ontop/input/materialized-triples.ttl" ]
+    environment:
+      #ONTOP_ONTOLOGY_FILE: /opt/ontop/input/urbankg.owl
+      #ONTOP_XML_CATALOG_FILE: /opt/ontop/input/catalog-v001.xml
+      ONTOP_MAPPING_FILE: /opt/ontop/input/urbankg-test1.obda
+      ONTOP_PROPERTIES_FILE: /opt/ontop/input/urbankg.properties
+      ONTOP_LOG_LEVEL: "debug"
+    volumes:
+      - ./vkg:/opt/ontop/input
+      - ./jdbc:/opt/ontop/jdbc
+    depends_on:
+      db-edit:
+        condition: service_completed_successfully
+    ports:
+      - "8082:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  d2g2:
 
 networks:
   citydb-net:
