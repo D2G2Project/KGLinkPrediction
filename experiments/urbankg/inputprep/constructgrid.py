@@ -5,6 +5,10 @@ import shapely.plotting
 from shapely.geometry import MultiPolygon, LineString
 from shapely.wkt import dumps
 import psycopg2
+# Uncomment to visualize graph
+#import geopandas as gpd
+#import matplotlib.pyplot as plt
+#import contextily as ctx
 
 # Get the current working directory
 cwd = os.getcwd()
@@ -36,8 +40,20 @@ highways_poly = unary_union(start_geoseries)
 polygons1 = polygonize(highways_poly)
 
 # Plot the multipolygon
-#multipolygon1 = MultiPolygon(polygons1)
-#shapely.plotting.plot_polygon(multipolygon1)
+# Create a GeoDataFrame
+#gdf = gpd.GeoDataFrame(geometry=[multipolygon1], crs="EPSG:4326")  # Use the appropriate CRS for your data
+
+# Plot the multipolygon
+#fig, ax = plt.subplots(figsize=(10, 10))
+#gdf = gdf.to_crs(epsg=3857)  # Reproject to match the basemap CRS
+#gdf.plot(ax=ax, edgecolor='k', facecolor='lightblue', alpha=0.5)
+
+# Add a basemap
+#ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik)
+
+#plt.savefig("bz_prim_seco_tert_resi.png", dpi=300)
+
+#plt.show()
 
 
 db_config = {
