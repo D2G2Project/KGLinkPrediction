@@ -1,0 +1,102 @@
+[PrefixDeclaration]
+:		http://www.unibz.it/d2g2/urbankg#
+d2g2:		http://www.unibz.it/d2g2/urbankg#
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xsd:		http://www.w3.org/2001/XMLSchema#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+geo:		http://www.opengis.net/ont/geosparql#
+
+[MappingDeclaration] @collection [[
+mappingId	Association_OSM_Class
+target		:osmlink/{id} a :Association_OSM_Class .
+source		SELECT "id"
+			FROM public."association_osm"
+
+mappingId	Association_OSM_Class_Node
+target		:osmlink/{id} :hasosmid lgd:node{osm_id} .
+source		SELECT id, osm_id
+			FROM public."association_osm"
+			WHERE osm_type='N'
+
+mappingId	Association_OSM_Class_Way
+target		:osmlink/{id} :hasosmid lgd:way{osm_id} .
+source		SELECT id, osm_id
+			FROM public."association_osm"
+			WHERE osm_type='W'
+
+mappingId	Association_OSM_Class_Relation
+target		:osmlink/{id} :hasosmid lgd:relation{osm_id} .
+source		SELECT id, osm_id
+			FROM public."association_osm"
+			WHERE osm_type='R'
+
+mappingId	Association_HasOSMClass
+target		:osmlink/{id} :hasosmclassid lgdo:osmclassid/{class_id} .
+source		SELECT *
+			FROM public."association_osm"
+
+mappingId	Association_HasOSMClassName
+target		lgdo:osmclassid/{class_id} a lgdo:{class_name} .
+source		SELECT *
+			FROM public.classes
+
+mappingId	lgd_nodes_properties
+target		lgd:node{osm_id} rdfs:label {name}^^xsd:string , {name_de}@de , {name_it}@it ; lgdo:addr_city {city}^^xsd:string ; lgdo:addr_country {country}^^xsd:string ; lgdo:addr_housenumber {housenumber}^^xsd:string ; lgdo:addr_street {street}^^xsd:string ; lgdo:postCode {postcode}^^xsd:string ; lgdo:addr_place {place}^^xsd:string .
+source		SELECT *
+			FROM public.entities
+			WHERE osm_type='N'
+
+mappingId	lgd_ways_properties
+target		lgd:way{osm_id} rdfs:label {name}^^xsd:string , {name_de}@de , {name_it}@it ; lgdo:addr_city {city}^^xsd:string ; lgdo:addr_country {country}^^xsd:string ; lgdo:addr_housenumber {housenumber}^^xsd:string ; lgdo:addr_street {street}^^xsd:string ; lgdo:postCode {postcode}^^xsd:string ; lgdo:addr_place {place}^^xsd:string .
+source		SELECT *
+			FROM public.entities
+			WHERE osm_type='W'
+
+mappingId	lgd_relations_properties
+target		lgd:relation{osm_id} rdfs:label {name}^^xsd:string , {name_de}@de , {name_it}@it ; lgdo:addr_city {city}^^xsd:string ; lgdo:addr_country {country}^^xsd:string ; lgdo:addr_housenumber {housenumber}^^xsd:string ; lgdo:addr_street {street}^^xsd:string ; lgdo:postCode {postcode}^^xsd:string ; lgdo:addr_place {place}^^xsd:string .
+source		SELECT *
+			FROM public.entities
+			WHERE osm_type='R'
+
+mappingId	lgd_nodes_has_geom
+target		lgd:node{osm_id} geo:hasGeometry lgdg:node{osm_id} .
+source		SELECT osm_id
+			FROM public.entities
+			WHERE osm_type='N'
+
+mappingId	lgd_ways_has_geom
+target		lgd:way{osm_id} geo:hasGeometry lgdg:way{osm_id} .
+source		SELECT osm_id
+			FROM public.entities
+			WHERE osm_type='W'
+
+mappingId	lgd_relations_has_geom
+target		lgd:relation{osm_id} geo:hasGeometry lgdg:relation{osm_id} .
+source		SELECT osm_id
+			FROM public.entities
+			WHERE osm_type='R'
+
+mappingId	lgd_nodes_wkt
+target		lgdg:node{osm_id} a geo:Geometry ; geo:asWKT {wkt}^^geo:wktLiteral .
+source		SELECT osm_id, ST_ASTEXT(geom) AS wkt
+			FROM public.entities
+			WHERE osm_type='N'
+
+mappingId	lgd_ways_wkt
+target		lgdg:way{osm_id} a geo:Geometry ; geo:asWKT {wkt}^^geo:wktLiteral .
+source		SELECT osm_id, ST_ASTEXT(geom) AS wkt
+			FROM public.entities
+			WHERE osm_type='W'
+
+mappingId	lgd_relations_wkt
+target		lgdg:relation{osm_id} a geo:Geometry ; geo:asWKT {wkt}^^geo:wktLiteral .
+source		SELECT osm_id, ST_ASTEXT(geom) AS wkt
+			FROM public.entities
+			WHERE osm_type='R'
+
+;mappingId	Co-visit
+;target		lgd:node{osm_id} d2g2:cooccur lgd:node{osm_id} .
+;source		SELECT "osm_id1", "osm_id2"
+			FROM "tourismdata_train_table"
+]]

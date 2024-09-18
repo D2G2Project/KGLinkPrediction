@@ -62,6 +62,7 @@ tables.association_osm = osm2pgsql.define_table{
 
 -- List all permitted classes
 local orderedList = {
+    "Abbey",
     "AerialwayGoods",
     "AerialwayStation",
     "AerialwayThing",
@@ -69,6 +70,7 @@ local orderedList = {
     "AntiquesShop",
     "ApartmentBuilding",
     "ApplianceShop",
+    "ArchaeologicalSite",
     "ArtShop",
     "ArtsCentre",
     "ArtShop",
@@ -81,7 +83,11 @@ local orderedList = {
     "Bank",
     "Bar",
     "BathroomFurnishing",
+    "Battlefield",
+    "Bay",
+    "Beach",
     "BeautyShop",
+    "Bedrock",
     "BedShop",
     "Bench",
     "BicycleParking",
@@ -91,7 +97,10 @@ local orderedList = {
     "BookmakerShop",
     "BooksShop",
     "Boutique",
+    "BoundaryMarker",
+    "BoundaryStone",
     "Bridge",
+    "Bridge_site",
     "Bridleway",
     "Brownfield",
     "Building",
@@ -116,14 +125,19 @@ local orderedList = {
     "CableCar",
     "Cafe",
     "CameraShop",
+    "Cape",
     "Carpet",
     "CarRental",
     "CarSharing",
     "CarShop",
     "CarWash",
     "Casino",
+    "Castle",
+    "Cave",
+    "CaveEntrance",
     "Cemetery",
     "ChairLift",
+    "Channel",
     "CharityShop",
     "Cheese",
     "Chemist",
@@ -131,10 +145,14 @@ local orderedList = {
     "Chocolate",
     "Cinema",
     "City",
+    "CityGate",
+    "Cliff",
     "Clinic",
     "Clock",
     "Clothes",
+    "Coastline",
     "CoffeeShop",
+    "Col",
     "Collapsed",
     "College",
     "CommercialLanduse",
@@ -147,6 +165,7 @@ local orderedList = {
     "Cosmetics",
     "Courthouse",
     "Crafts",
+    "Crater",
     "Courthouse",
     "Cycling",
     "Cycleway",
@@ -165,10 +184,14 @@ local orderedList = {
     "Fabric",
     "FashionShop",
     "FastFood",
+    "Fell",
+    "Fen",
     "FireStation",
     "FitnessCentre",
+    "Fjord",
     "Florist",
     "Footway",
+    "Fort",
     "Fountain",
     "Fraternity",
     "FuneralDirectors",
@@ -178,10 +201,14 @@ local orderedList = {
     "Games",
     "Garage",
     "Garden",
+    "Geyser",
     "Gift",
     "GiveWaySign",
+    "Glacier",
     "Glaziery",
+    "Gondola",
     "GovernmentBuilding",
+    "Grassland",
     "GrassLanduse",
     "Greengrocer",
     "GritBin",
@@ -189,8 +216,11 @@ local orderedList = {
     "Hackerspace",
     "Hairdresser",
     "Hardware",
+    "Headland",
     "HealthFood",
     "HearingAids",
+    "Heath",
+    "Heritage",
     "Hifi",
     "HighwayConstruction",
     "HighwayCrossing",
@@ -198,6 +228,23 @@ local orderedList = {
     "HighwaySecondaryLink",
     "HighwayService",
     "HighwayTertiaryLink",
+    "Hill",
+    "HistoricBuilding",
+    "HistoricChapel",
+    "HistoricChurch",
+    "HistoricFountain",
+    "HistoricHouse",
+    "HistoricIndustrial",
+    "HistoricMarker",
+    "HistoricMilestone",
+    "HistoricMine",
+    "HistoricMonastery",
+    "HistoricMuseum",
+    "HistoricPointOfInterest",
+    "HistoricStatue",
+    "HistoricTower",
+    "HistoricWell",
+    "HistoricThing",
     "HobbyShop",
     "HomeFurnishing",
     "Hospital",
@@ -206,45 +253,69 @@ local orderedList = {
     "House",
     "Housewares",
     "IceCream",
+    "Icon",
     "IndustrialLanduse",
     "IndustrialProductionBuilding",
     "InternetCafe",
+    "Island",
     "Jewelry",
     "Kindergarten",
     "Kiosk",
     "KitchenShop",
+    "Land",
     "LanguageSchool",
     "Laundry",
+    "Lavoir",
     "Leisure",
     "Library",
     "Lighting",
     "LivingStreet",
     "Locksmith",
+    "Manor",
+    "Marsh",
     "MassageShop",
     "Marketplace",
     "Meadow",
+    "Memorial",
+    "Menhir",
+    "Mill",
+    "MineShaft",
     "MiniRoundabout",
     "MixedLift",
     "MobilePhone",
     "Monastery",
+    "Monument",
+    "Moor",
     "Motorcycle",
     "Motorway",
+    "MountainPass",
+    "Mud",
     "Museum",
+    "Mushroom",
     "Music",
     "MusicalInstrument",
+    "NaturalBench",
+    "NaturalRiver",
+    "NaturalRock",
     "NaturalThing",
+    "NaturalValley",
+    "NaturalWaterfall",
+    "NatureReserve",
     "Newsagent",
     "Nightclub",
     "OpticianShop",
     "Outdoor",
     "Paint",
+    "Palace",
     "Park",
     "Parking",
     "ParkingEntrance",
     "ParkingSpace",
     "Pastry",
     "Path",
+    "Peak",
     "PedestrianUse",
+    "Peninsula",
     "Perfumery",
     "PetShop",
     "Pharmacy",
@@ -252,6 +323,8 @@ local orderedList = {
     "PicnicSite",
     "Pitch",
     "PlaceOfWorship",
+    "Plain",
+    "Plateau",
     "Platform",
     "Playground",
     "Police",
@@ -260,11 +333,15 @@ local orderedList = {
     "Pottery",
     "PrimaryHighway",
     "ProposedHighway",
+    "ProtectedBuilding",
     "Pub",
     "PublicBuilding",
+    "Pylon",
     "Raceway",
     "RailwayLanduse",
     "Recycling",
+    "Reef",
+    "Region",
     "Religious",
     "Rent",
     "ResidentialHighway",
@@ -272,28 +349,42 @@ local orderedList = {
     "RestArea",
     "Restaurant",
     "RetailLanduse",
+    "Ridge",
     "Road",
+    "Rock",
     "Ruins",
+    "RuneStone",
+    "SaintsCross",
+    "Sand",
     "Sauna",
     "School",
+    "Scree",
     "Scrub",
+    "Sea",
     "SecondaryHighway",
     "SecondaryLink",
     "SecondHand",
     "Service",
     "Shed",
     "Shelter",
+    "Shoal",
     "Shoes",
     "Shop",
     "SocialFacility",
     "SpeedCamera",
     "SportsCentre",
     "SportsShop",
+    "Spring",
+    "Square",
     "Stationery",
     "Steps",
+    "Stone",
+    "StoneCircle",
+    "Strait",
     "StreetLamp",
     "Stripclub",
     "Studio",
+    "Suburb",
     "Supermarket",
     "Synagogue",
     "Tailor",
@@ -308,6 +399,7 @@ local orderedList = {
     "Ticket",
     "Tobacco",
     "Toilets",
+    "Tombstone",
     "TourismInformation",
     "TourismThing",
     "Townhall",
@@ -320,6 +412,7 @@ local orderedList = {
     "TreeRow",
     "Trunk",
     "TrunkLink",
+    "Tumulus",
     "TurningCircle",
     "University",
     "UnclassifiedHighway",
@@ -330,12 +423,19 @@ local orderedList = {
     "VideoShop",
     "Viewpoint",
     "VillageGreen",
+    "Volcano",
     "WasteBasket",
     "WasteDisposal",
     "Watches",
     "Water",
+    "Waterhole",
+    "WaysideChapel",
+    "WaysideCross",
+    "WaysideShrine",
+    "Wetland",
     "Wine",
-    "Wood"
+    "Wood",
+    "Wreck"
 }
 
 
@@ -383,7 +483,7 @@ end
 -- Superclasses
 -- Set variable which lists objects we are interested in
 local filteredlist = { "highway", "building", "amenity", "shop", "natural", "place", "landuse", "tourism", "leisure",
-                       "aeroway", "aerialway"} -- No items for the last 2 in munich
+                       "aeroway", "aerialway", "historic"}
 -- Within Building
 local buildingUndescoreList = { "sports_centre", "train_station"}
 local buildingSuperclassSubclassList = {"barn", "bunker", "cabin", "chapel", "church", "commercial", "office", "retail",
@@ -425,10 +525,16 @@ local shopSubclassList = { "clothes", "hairdresser", "jewelry", "bakery", "shoes
                            "lighting", "music", "chocolate", "locksmith", "pottery", "toys", "games", "laundry", "carpet",
                            "paint", "pastry", "boutique", "motorcycle", "cheese", "hardware", "glaziery", "glass", "telecommunication" }
 -- Natural
-local naturalUndescoreList = { "tree_row"}
-local naturalSubclassList = { "tree", "water", "wood", "scrub" }
+local naturalUndescoreList = { "tree_row", "cave_entrance" }
+local naturalSuperclassSubclassList = { "bench", "river", "rock", "valley", "waterfall"}
+local naturalSubclassList = { "tree", "water", "wood", "scrub", "peak", "peninsula", "plain", "plateau", "reef", "ridge", "rock", "sand", "scree",
+"sea", "shoal", "spring", "stone", "strait", "volcano", "waterhole", "wetland", "bay", "beach", "bedrock", "cape", "cave", "channel",
+                              "cliff", "coastline", "col", "crater", "fell", "fen", "fjord", "geyser", "glacier",
+                              "grassland", "headland", "heath", "hill", "island", "land", "marsh", "moor", "mountainpass",
+                              "mud", "mushroom"}
+
 -- Place
-local placeSubclassList = { "city", "sububrb" }
+local placeSubclassList = { "city", "square", "suburb", "region"}
 -- Landuse
 local landuseUndescoreList = { "village_green"}
 local landuseSubclassSuperclassList = { "grass", "residential", "commercial", "retail", "railway", "industrial"}
@@ -438,11 +544,20 @@ local tourismUndescoreList = { "guest_house", "picnic_site"}
 local tourismSuperclassSubclassList = {"information"}
 local tourismSubclassList = { "hotel", "artwork", "gallery", "attraction", "museum", "hostel", "viewpoint", "casino" }
 -- Leisure
-local leisureUndescoreList = { "fitness_centre", "sports_centre"}
+local leisureUndescoreList = { "fitness_centre", "sports_centre", "nature_reserve"}
 local leisureSubclassList = { "park", "garden", "playground", "pitch", "dance", "hackerspace", "sauna", "track" }
 -- Aerialway
 local aerialwayUndescoreList = { "mixed_lift", "drag_lift", "chair_lift", "cable_car"}
 local aerialwaySubclassSuperclassList = { "goods", "station" }
+local aerialwaySubclassList = { "gondola", "pylon" }
+
+-- Historic
+local historicUndescoreList = { "archaeological_site", "boundary_stone", "city_gate", "cable_car", "wayside_chapel",
+"wayside_cross", "wayside_shrine"}
+local historicSubclassList = { "abbey", "battlefield", "castle", "fort", "lavoir", "manor", "memorial", "menhill", "mill", "monument",
+                               "palace", "ruins", "tombstone", "tumulus", "wreck"}
+local historicSuperclassSubclassList = { "building", "chapel", "church", "fountain", "house", "industrial", "marker",
+"milestone", "mine", "monastery", "museum", "statue", "tower", "well", "protected"}
 
 
 -- Handle quite common scenarios
@@ -459,7 +574,8 @@ local function refineclasses(list1, k ,v)
             and starts_with(v, "yes")
     then return k_upper
     elseif (starts_with(k, "highway") or starts_with(k, "tourism") or starts_with(k, "natural")
-            or starts_with(k, "aeroway") or starts_with(k, "aerialway")) and starts_with(v, "yes")
+            or starts_with(k, "aeroway") or starts_with(k, "aerialway") or starts_with(k, "historic"))
+            and starts_with(v, "yes")
     then return k_upper.."Thing"
 
         -- Building
@@ -521,6 +637,8 @@ local function refineclasses(list1, k ,v)
     then return v_upper
     elseif starts_with(k, "natural") and contains(naturalUndescoreList, v)
     then return removeUnderscoreAndCapitalize(v)
+    elseif starts_with(k, "natural") and contains(naturalSuperclassSubclassList, v)
+    then return k_upper..v_upper
 
         -- Place
     elseif starts_with(k, "place") and contains(placeSubclassList, v)
@@ -556,13 +674,20 @@ local function refineclasses(list1, k ,v)
     --elseif starts_with(k, "leisure") and starts_with(v, "yes")
     --then return "Leisure"
 
-        -- Aerialway
+    -- Aerialway
+    elseif starts_with(k, "aerialway") and contains(aerialwaySubclassList, v)
+    then return v_upper
     elseif starts_with(k, "aerialway") and contains(aerialwaySubclassSuperclassList, v)
     then return k_upper..v_upper
     elseif starts_with(k, "aerialway") and contains(aerialwayUndescoreList, v)
     then return removeUnderscoreAndCapitalize(v)
-    --elseif starts_with(k, "aerialway") and starts_with(v, "yes")
-    --then return "AerialwayThing"
+    -- Historic
+    elseif starts_with(k, "historic") and contains(historicSubclassList, v)
+    then return v_upper
+    elseif starts_with(k, "historic") and contains(historicSuperclassSubclassList, v)
+    then return k_upper..v_upper
+    elseif starts_with(k, "historic") and contains(historicUndescoreList, v)
+    then return removeUnderscoreAndCapitalize(v)
 
     else
         return "do_nothing"

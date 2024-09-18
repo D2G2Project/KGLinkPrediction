@@ -5,16 +5,15 @@ geospatial knowledge graphs and techniques. The aim is to test whether
 existing solutions apply to an arbitrary geospatial context such as South Tyrol or Bavaria
 and data such as CityGML.
 
-## Experiment 1 (WIP)
-UrbanKG (WIP)
+## Experiment 1 - Tourism data in South Tyrol
 
-## Experiment 2 (WIP)
-Space2Vec (WIP)
-
-We use the Space2Vec encoding algorithm to generate embeddings for the
-geosptial link prediction tasks. 
-
-## Data (WIP)
+### Raw Data
 South Tyrol
-- OSM data
-- Construction data (CityGML v2 Level of Detail 0)
+- OSM data for the province of South Tyrol
+- Tourism data from the province of South Tyrol based on travel blogs
+
+### Knowledge Graph
+- Construct a knowledge graph from the raw data
+- Links:
+  - LinkedGeoData classes
+  - d2g2:cooccurrence between LinkedGeoData POIs (tourist spots)
