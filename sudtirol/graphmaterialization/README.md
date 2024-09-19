@@ -13,8 +13,8 @@ docker-compose -f docker-compose.materialize.yml up
 
 ### SQL Schema Changes (WIP)
 The following changes were made to the SQL schema:
-- Added a new table **tourismdata_train** to store the POIs that co-occur. Only training data is stored in this table.
-    - Only training data can be used to generate the input graph for the model. Test and validation data are only used for the evaluation.
+- Added a new table **covisit** to store the POIs that co-occur. Only training data is stored in this table.
+    - Only training data can be used to generate the input graph for the model.
 
 ### Graph structure (WIP)
 The properties included in the graph are:
@@ -22,3 +22,4 @@ The properties included in the graph are:
 - Co-occurrence relation between POIs
 - WIP - Additional properties
   - NOTE: Literal properties are not included in the graph e.g. name, description, etc.
+- No distinction between OSM data structures such as nodes, ways and relations is made in the graph, as such they all use the same IRI template.

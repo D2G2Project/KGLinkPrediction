@@ -60,7 +60,7 @@ services:
 #    command: [ "ontop", "materialize", "-f", "turtle", "--output", "/opt/ontop/input/materialized-triples.ttl" ]
 #    environment:
 #      #ONTOP_ONTOLOGY_FILE: /opt/ontop/input/citygml2.0.owl
-#      #ONTOP_XML_CATALOG_FILE: /opt/ontop/input/catalog-v001.xml
+#      ONTOP_XML_CATALOG_FILE: /opt/ontop/input/catalog-v001.xml
 #      ONTOP_MAPPING_FILE: /opt/ontop/input/geolinkprediction.obda
 #      ONTOP_PROPERTIES_FILE: /opt/ontop/input/geolinkprediction.properties
 #      ONTOP_LOG_LEVEL: "debug"

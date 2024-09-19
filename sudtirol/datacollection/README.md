@@ -22,5 +22,5 @@ The file **formatted_cooccurrence_matrix.csv** contains the co-occurrence matrix
 
 WIP - A file with the distance decay matrix will be added.
 
-### Split train / test / validation (WIP)
-WIP - Since co-occurrence is symmetric, we need to avoid having the same relation in both train and test/validation
+### Split train / test / validation
+8. The train/test/validation split is 7/2/1.
