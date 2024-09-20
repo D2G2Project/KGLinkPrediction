@@ -13,7 +13,7 @@ RUN apt-get clean \
         && rm -rf /var/lib/apt/lists/*
 
 ADD osm-importer.sh /usr/local/bin/osm-importer.sh
-ADD osm-refined.lua /user/local/bin/osm-refined.lua
+ADD osm-geolinkprediction.lua /user/local/bin/osm-refined.lua
 
 RUN chmod +x /usr/local/bin/osm-importer.sh
 

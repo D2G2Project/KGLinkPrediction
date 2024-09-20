@@ -8,38 +8,14 @@ rdfs:		http://www.w3.org/2000/01/rdf-schema#
 geo:		http://www.opengis.net/ont/geosparql#
 
 [MappingDeclaration] @collection [[
-mappingId	Association_OSM_Class
-target		:osmlink/{id} a :Association_OSM_Class .
-source		SELECT "id"
-			FROM public."association_osm"
-
-mappingId	Association_OSM_Class_Entity
-target		:osmlink/{id} :hasosmid lgd:entity{osm_id} .
-source		SELECT id, osm_id
-			FROM public."association_osm"
-
-mappingId	Association_HasOSMClass
-target		:osmlink/{id} :hasosmclassid lgdo:osmclassid/{class_id} .
-source		SELECT *
-			FROM public."association_osm"
-
-mappingId	Association_HasOSMClassName
-target		lgdo:osmclassid/{class_id} a lgdo:{class_name} .
-source		SELECT *
-			FROM public.classes
-
-mappingId	lgd_nodes_has_geom
-target		lgd:entity{osm_id} geo:hasGeometry lgdg:entity{osm_id} .
-source		SELECT osm_id
-			FROM public.entities
-
-mappingId	lgd_entities_wkt
-target		lgdg:entity{osm_id} a geo:Geometry ; geo:asWKT {wkt}^^geo:wktLiteral .
-source		SELECT osm_id, ST_ASTEXT(geom) AS wkt
-			FROM public.entities
+;TODO: Do not get all OSM classes (630k triples)
+mappingId	OSM classes
+target		lgd:entity/{id} a lgdo:{class_name} .
+source		SELECT "id", "class_name"
+			FROM public.entities LEFT JOIN public.classes ON entities.class = classes.class::TEXT
 
 mappingId	co-visit (symmetric)
-target		lgd:node{osm_id_1} d2g2:covisit lgd:node{osm_id_2} .
+target		lgd:entity{osm_id_1} d2g2:covisit lgd:entity{osm_id_2} .
 source		SELECT "osm_id_1", "osm_id_2"
 			FROM "covisit"
 
