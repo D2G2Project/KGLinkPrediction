@@ -43,8 +43,20 @@ target		lgd:node{osm_id_1} d2g2:covisit lgd:node{osm_id_2} .
 source		SELECT "osm_id_1", "osm_id_2"
 			FROM "covisit"
 
-mappingId	co-visit (symmetric)
-target		lgd:node{osm_id} d2g2:region :Region/{region_name} .
-source		SELECT "osm_id", "region_name"
+mappingId	d2g2:locateAt
+target		lgd:node{osm_id} d2g2:locateAt :Region/{region_id} .
+source		SELECT "osm_id", "region_id"
 			FROM "entities"
+
+mappingId	d2g2:borderBy
+target		:Region/{gid1} d2g2:borderBy :Region/{gid2} .
+source		SELECT "gid1", "gid2", "relation"
+			FROM "region_spatial_relations"
+			WHERE relation = 'borderby'
+
+mappingId	d2g2:nearBy
+target		lgd:node{osm_id} d2g2:nearBy :Region/{region_name} .
+source		SELECT "gid1", "gid2", "relation"
+			FROM "region_spatial_relations"
+			WHERE relation = 'nearby'
 ]]

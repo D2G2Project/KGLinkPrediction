@@ -18,10 +18,13 @@ The following changes were made to the SQL schema:
 
 ### Graph structure (WIP)
 The properties included in the graph are:
-- Classes of Points of Interest (POIs) e.g. Amenity, Shop, Tourism, etc.
-- Co-occurrence relation between POIs
-- Region
-  - Municipalities of South Tyrol. The centroid of the osm_id geometry determines the region.
-- WIP - Additional properties
-  - NOTE: Literal properties are not included in the graph e.g. name, description, etc.
-- No distinction between OSM data structures such as nodes, ways and relations is made in the graph, as such they all use the same IRI template.
+- rdf:type. Class of Points of Interest (POIs) e.g. Amenity, Shop, Tourism, etc.
+  - No distinction between OSM data structures such as nodes, ways and relations is made in the graph, as such they all use the same IRI template.
+- d2g2:covisit. Co-occurrence relation between POIs based on blog data
+- d2g2:locateAt. Location of the POI. The centroid of the osm_id geometry determines the location.
+  - Municipality boundaries of South Tyrol used for this analysis.
+- d2g2:borderBy. Two region entities that share the boundary.
+  - Tolerance of 50m is used to determine if two regions share a boundary.
+- d2g2:nearBy. Too region entities that are close to each other.
+  - We arbitrarily define close as being within 5 km of each other. No specific distance is provided in the original paper.
+- NOTE: Literal properties are not included in the graph e.g. name, description, etc.

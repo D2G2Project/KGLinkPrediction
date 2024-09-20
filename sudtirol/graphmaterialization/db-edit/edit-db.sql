@@ -436,8 +436,31 @@ ALTER COLUMN osm_id TYPE BIGINT USING osm_id::NUMERIC;
 
 
 -- Add region name to entities table
-ALTER TABLE entities ADD COLUMN region_name VARCHAR(255);
+ALTER TABLE entities ADD COLUMN region_id INT;
 UPDATE entities t1
-SET region_name = t2.name_3
+SET region_id = t2.gid
     FROM region_south_tyrol t2
 WHERE ST_Contains(t2.geom, ST_CENTROID(t1.geom));
+
+
+-- Create table for region spatial relations
+CREATE TABLE region_spatial_relations AS
+WITH pairs AS (
+    SELECT
+        a.gid AS gid1,
+        b.gid AS gid2
+    FROM region_south_tyrol a
+             JOIN region_south_tyrol b ON a.gid < b.gid
+)
+SELECT
+    p.gid1,
+    p.gid2,
+    CASE
+        WHEN ST_DWithin(a.geom::geography, b.geom::geography, 50) THEN 'borderby'
+        WHEN ST_Distance(a.geom::geography, b.geom::geography) <= 5000 THEN 'nearby'
+        ELSE NULL
+        END AS relation
+FROM pairs p
+         JOIN region_south_tyrol a ON p.gid1 = a.gid
+         JOIN region_south_tyrol b ON p.gid2 = b.gid
+WHERE ST_Distance(a.geom::geography, b.geom::geography) <= 5000;
