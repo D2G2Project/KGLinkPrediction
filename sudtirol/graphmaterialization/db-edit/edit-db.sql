@@ -2,6 +2,7 @@
 ALTER TABLE public.classes DROP COLUMN id;
 INSERT INTO public.classes VALUES
                                ('Abbey'),
+                               ('AdministrativeBoundary'),
                                ('AerialwayGoods'),
                                ('AerialwayStation'),
                                ('AerialwayThing'),
@@ -35,6 +36,8 @@ INSERT INTO public.classes VALUES
                                ('Biergarten'),
                                ('BookmakerShop'),
                                ('BooksShop'),
+                               ('Boundary'),
+                               ('BoundaryForest'),
                                ('BoundaryMarker'),
                                ('BoundaryStone'),
                                ('Boutique'),
@@ -85,6 +88,8 @@ INSERT INTO public.classes VALUES
                                ('Cinema'),
                                ('City'),
                                ('CityGate'),
+                               ('CityLimit'),
+                               ('CivilBoundary'),
                                ('Cliff'),
                                ('Clinic'),
                                ('Clock'),
@@ -211,6 +216,7 @@ INSERT INTO public.classes VALUES
                                ('LivingStreet'),
                                ('Locksmith'),
                                ('Manor'),
+                               ('MaritimeBoundary'),
                                ('Marsh'),
                                ('MassageShop'),
                                ('Marketplace'),
@@ -228,11 +234,13 @@ INSERT INTO public.classes VALUES
                                ('Motorcycle'),
                                ('Motorway'),
                                ('MountainPass'),
+                               ('MountainRange'),
                                ('Mud'),
                                ('Museum'),
                                ('Mushroom'),
                                ('Music'),
                                ('MusicalInstrument'),
+                               ('NationalPark'),
                                ('NaturalBench'),
                                ('NaturalRiver'),
                                ('NaturalRock'),
@@ -267,11 +275,13 @@ INSERT INTO public.classes VALUES
                                ('Platform'),
                                ('Playground'),
                                ('Police'),
+                               ('PoliticalBoundary'),
                                ('PostBox'),
                                ('PostOffice'),
                                ('Pottery'),
                                ('PrimaryHighway'),
                                ('ProposedHighway'),
+                               ('ProtectedArea'),
                                ('ProtectedBuilding'),
                                ('Pub'),
                                ('PublicBuilding'),
@@ -368,6 +378,7 @@ INSERT INTO public.classes VALUES
                                ('Watches'),
                                ('Water'),
                                ('Waterhole'),
+                               ('WaterPark'),
                                ('WaysideChapel'),
                                ('WaysideCross'),
                                ('WaysideShrine'),
@@ -422,3 +433,11 @@ DROP TABLE planet_osm_rels;
 -- Fix osm_id type in entities table
 ALTER TABLE entities
 ALTER COLUMN osm_id TYPE BIGINT USING osm_id::NUMERIC;
+
+
+-- Add region name to entities table
+ALTER TABLE entities ADD COLUMN region_name VARCHAR(255);
+UPDATE entities t1
+SET region_name = t2.name_3
+    FROM region_south_tyrol t2
+WHERE ST_Contains(t2.geom, ST_CENTROID(t1.geom));

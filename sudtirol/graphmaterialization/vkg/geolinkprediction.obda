@@ -28,11 +28,6 @@ target		lgdo:osmclassid/{class_id} a lgdo:{class_name} .
 source		SELECT *
 			FROM public.classes
 
-mappingId	lgd_entity_properties
-target		lgd:entity{osm_id} rdfs:label {name}^^xsd:string , {name_de}@de , {name_it}@it ; lgdo:addr_city {city}^^xsd:string ; lgdo:addr_country {country}^^xsd:string ; lgdo:addr_housenumber {housenumber}^^xsd:string ; lgdo:addr_street {street}^^xsd:string ; lgdo:postCode {postcode}^^xsd:string ; lgdo:addr_place {place}^^xsd:string .
-source		SELECT *
-			FROM public.entities
-
 mappingId	lgd_nodes_has_geom
 target		lgd:entity{osm_id} geo:hasGeometry lgdg:entity{osm_id} .
 source		SELECT osm_id
@@ -47,4 +42,9 @@ mappingId	co-visit (symmetric)
 target		lgd:node{osm_id_1} d2g2:covisit lgd:node{osm_id_2} .
 source		SELECT "osm_id_1", "osm_id_2"
 			FROM "covisit"
+
+mappingId	co-visit (symmetric)
+target		lgd:node{osm_id} d2g2:region :Region/{region_name} .
+source		SELECT "osm_id", "region_name"
+			FROM "entities"
 ]]

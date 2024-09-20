@@ -63,6 +63,7 @@ tables.association_osm = osm2pgsql.define_table{
 -- List all permitted classes
 local orderedList = {
     "Abbey",
+    "AdministrativeBoundary",
     "AerialwayGoods",
     "AerialwayStation",
     "AerialwayThing",
@@ -97,6 +98,8 @@ local orderedList = {
     "BookmakerShop",
     "BooksShop",
     "Boutique",
+    "Boundary",
+    "BoundaryForest",
     "BoundaryMarker",
     "BoundaryStone",
     "Bridge",
@@ -146,6 +149,8 @@ local orderedList = {
     "Cinema",
     "City",
     "CityGate",
+    "CityLimit",
+    "CivilBoundary",
     "Cliff",
     "Clinic",
     "Clock",
@@ -272,6 +277,7 @@ local orderedList = {
     "LivingStreet",
     "Locksmith",
     "Manor",
+    "MaritimeBoundary",
     "Marsh",
     "MassageShop",
     "Marketplace",
@@ -289,11 +295,13 @@ local orderedList = {
     "Motorcycle",
     "Motorway",
     "MountainPass",
+    "MountainRange",
     "Mud",
     "Museum",
     "Mushroom",
     "Music",
     "MusicalInstrument",
+    "NationalPark",
     "NaturalBench",
     "NaturalRiver",
     "NaturalRock",
@@ -328,11 +336,13 @@ local orderedList = {
     "Platform",
     "Playground",
     "Police",
+    "PoliticalBoundary",
     "PostBox",
     "PostOffice",
     "Pottery",
     "PrimaryHighway",
     "ProposedHighway",
+    "ProtectedArea",
     "ProtectedBuilding",
     "Pub",
     "PublicBuilding",
@@ -429,6 +439,7 @@ local orderedList = {
     "Watches",
     "Water",
     "Waterhole",
+    "WaterPark",
     "WaysideChapel",
     "WaysideCross",
     "WaysideShrine",
@@ -483,7 +494,7 @@ end
 -- Superclasses
 -- Set variable which lists objects we are interested in
 local filteredlist = { "highway", "building", "amenity", "shop", "natural", "place", "landuse", "tourism", "leisure",
-                       "aeroway", "aerialway", "historic"}
+                       "aeroway", "aerialway", "historic", "boundary"}
 -- Within Building
 local buildingUndescoreList = { "sports_centre", "train_station"}
 local buildingSuperclassSubclassList = {"barn", "bunker", "cabin", "chapel", "church", "commercial", "office", "retail",
@@ -525,7 +536,7 @@ local shopSubclassList = { "clothes", "hairdresser", "jewelry", "bakery", "shoes
                            "lighting", "music", "chocolate", "locksmith", "pottery", "toys", "games", "laundry", "carpet",
                            "paint", "pastry", "boutique", "motorcycle", "cheese", "hardware", "glaziery", "glass", "telecommunication" }
 -- Natural
-local naturalUndescoreList = { "tree_row", "cave_entrance" }
+local naturalUndescoreList = { "tree_row", "cave_entrance", "mountain_range" }
 local naturalSuperclassSubclassList = { "bench", "river", "rock", "valley", "waterfall"}
 local naturalSubclassList = { "tree", "water", "wood", "scrub", "peak", "peninsula", "plain", "plateau", "reef", "ridge", "rock", "sand", "scree",
 "sea", "shoal", "spring", "stone", "strait", "volcano", "waterhole", "wetland", "bay", "beach", "bedrock", "cape", "cave", "channel",
@@ -544,7 +555,7 @@ local tourismUndescoreList = { "guest_house", "picnic_site"}
 local tourismSuperclassSubclassList = {"information"}
 local tourismSubclassList = { "hotel", "artwork", "gallery", "attraction", "museum", "hostel", "viewpoint", "casino" }
 -- Leisure
-local leisureUndescoreList = { "fitness_centre", "sports_centre", "nature_reserve"}
+local leisureUndescoreList = { "fitness_centre", "sports_centre", "nature_reserve", "water_park"}
 local leisureSubclassList = { "park", "garden", "playground", "pitch", "dance", "hackerspace", "sauna", "track" }
 -- Aerialway
 local aerialwayUndescoreList = { "mixed_lift", "drag_lift", "chair_lift", "cable_car"}
@@ -559,6 +570,10 @@ local historicSubclassList = { "abbey", "battlefield", "castle", "fort", "lavoir
 local historicSuperclassSubclassList = { "building", "chapel", "church", "fountain", "house", "industrial", "marker",
 "milestone", "mine", "monastery", "museum", "statue", "tower", "well", "protected"}
 
+-- Boundary
+local boundaryUndescoreList = { "city_limit", "national_park", "protected_area" }
+local boundarySubclassSuperclassList = { "administrative", "civil", "maritime", "political" }
+local boundarySuperclassSubclassList = { "forest" }
 
 -- Handle quite common scenarios
 -- e.g. 1) building=yes 2) highway=primary
@@ -570,7 +585,8 @@ local function refineclasses(list1, k ,v)
         return "do_nothing"
         -- Superclasses
     elseif (starts_with(k, "building") or starts_with(k, "amenity") or starts_with(k, "shop")
-            or starts_with(k, "place") or starts_with(k, "landuse") or starts_with(k, "leisure"))
+            or starts_with(k, "place") or starts_with(k, "landuse") or starts_with(k, "leisure")
+            or starts_with(k, "boundary") or starts_with(k, "mountain_pass"))
             and starts_with(v, "yes")
     then return k_upper
     elseif (starts_with(k, "highway") or starts_with(k, "tourism") or starts_with(k, "natural")
@@ -687,6 +703,13 @@ local function refineclasses(list1, k ,v)
     elseif starts_with(k, "historic") and contains(historicSuperclassSubclassList, v)
     then return k_upper..v_upper
     elseif starts_with(k, "historic") and contains(historicUndescoreList, v)
+    then return removeUnderscoreAndCapitalize(v)
+    -- Boundary
+    elseif starts_with(k, "boundary") and contains(boundarySubclassSuperclassList, v)
+    then return v_upper..k_upper
+    elseif starts_with(k, "boundary") and contains(boundarySuperclassSubclassList, v)
+    then return k_upper..v_upper
+    elseif starts_with(k, "boundary") and contains(boundaryUndescoreList, v)
     then return removeUnderscoreAndCapitalize(v)
 
     else

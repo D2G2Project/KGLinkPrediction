@@ -20,6 +20,8 @@ The following changes were made to the SQL schema:
 The properties included in the graph are:
 - Classes of Points of Interest (POIs) e.g. Amenity, Shop, Tourism, etc.
 - Co-occurrence relation between POIs
+- Region
+  - Municipalities of South Tyrol. The centroid of the osm_id geometry determines the region.
 - WIP - Additional properties
   - NOTE: Literal properties are not included in the graph e.g. name, description, etc.
 - No distinction between OSM data structures such as nodes, ways and relations is made in the graph, as such they all use the same IRI template.

@@ -10844,6 +10844,14 @@
 
 
 
+    <!-- http://linkedgeodata.org/ontology/MountainRange -->
+
+    <owl:Class rdf:about="http://linkedgeodata.org/ontology/MountainRange">
+        <rdfs:subClassOf rdf:resource="http://linkedgeodata.org/ontology/NaturalThing"/>
+    </owl:Class>
+
+
+
     <!-- http://linkedgeodata.org/ontology/MountainRescue -->
 
     <owl:Class rdf:about="http://linkedgeodata.org/ontology/MountainRescue">
@@ -14850,6 +14858,7 @@
             <rdf:Description rdf:about="http://linkedgeodata.org/ontology/Marsh"/>
             <rdf:Description rdf:about="http://linkedgeodata.org/ontology/Moor"/>
             <rdf:Description rdf:about="http://linkedgeodata.org/ontology/MountainPass"/>
+            <rdf:Description rdf:about="http://linkedgeodata.org/ontology/MountainRange"/>
             <rdf:Description rdf:about="http://linkedgeodata.org/ontology/Mud"/>
             <rdf:Description rdf:about="http://linkedgeodata.org/ontology/Mushroom"/>
             <rdf:Description rdf:about="http://linkedgeodata.org/ontology/NaturalBench"/>
