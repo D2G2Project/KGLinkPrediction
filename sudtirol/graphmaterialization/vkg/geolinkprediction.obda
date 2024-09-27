@@ -6,21 +6,23 @@ rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
 xsd:		http://www.w3.org/2001/XMLSchema#
 rdfs:		http://www.w3.org/2000/01/rdf-schema#
 geo:		http://www.opengis.net/ont/geosparql#
+lgd:		http://linkedgeodata.org/resource/
+lgdo:		http://linkedgeodata.org/ontology/
 
 [MappingDeclaration] @collection [[
 ;TODO: Do not get all OSM classes (630k triples)
 mappingId	OSM classes
-target		lgd:entity/{id} a lgdo:{class_name} .
-source		SELECT "id", "class_name"
-			FROM public.entities LEFT JOIN public.classes ON entities.class = classes.class::TEXT
+target		lgd:entity/{osm_id} a lgdo:{class_name} .
+source		SELECT "osm_id", "class_name"
+			FROM public.entities LEFT JOIN public.classes ON entities.class = classes.class_id::TEXT
 
 mappingId	co-visit (symmetric)
-target		lgd:entity{osm_id_1} d2g2:covisit lgd:entity{osm_id_2} .
+target		lgd:entity/{osm_id_1} d2g2:covisit lgd:entity/{osm_id_2} .
 source		SELECT "osm_id_1", "osm_id_2"
 			FROM "covisit"
 
 mappingId	d2g2:locateAt
-target		lgd:node{osm_id} d2g2:locateAt :Region/{region_id} .
+target		lgd:entity/{osm_id} d2g2:locateAt :Region/{region_id} .
 source		SELECT "osm_id", "region_id"
 			FROM "entities"
 
@@ -31,7 +33,7 @@ source		SELECT "gid1", "gid2", "relation"
 			WHERE relation = 'borderby'
 
 mappingId	d2g2:nearBy
-target		lgd:node{osm_id} d2g2:nearBy :Region/{region_name} .
+target		:Region/{gid1} d2g2:nearBy :Region/{gid2} .
 source		SELECT "gid1", "gid2", "relation"
 			FROM "region_spatial_relations"
 			WHERE relation = 'nearby'

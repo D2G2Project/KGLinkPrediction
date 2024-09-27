@@ -32,10 +32,16 @@ def flatten_co_occurrence_matrix(co_occurrence_matrix):
             if osm_id_1 != osm_id_2:  # Avoid diagonal pairs (self pairs)
                 score = co_occurrence_matrix.loc[osm_id_1, osm_id_2]
                 flat_co_occurrence.append([osm_id_1, osm_id_2, score])
-    return pd.DataFrame(flat_co_occurrence, columns=['osm_id_1', 'osm_id_2', 'score'])
+    # Convert to DataFrame
+    flat_df = pd.DataFrame(flat_co_occurrence, columns=['osm_id_1', 'osm_id_2', 'score'])
+
+    # Convert `osm_id_1` and `osm_id_2` to strings without '.0'
+    flat_df['osm_id_1'] = flat_df['osm_id_1'].astype(int).astype(str)
+    flat_df['osm_id_2'] = flat_df['osm_id_2'].astype(int).astype(str)
+    return flat_df
 
 # Step 5: Stratified split function for train/validation/test split
-def stratified_split(df, train_ratio=0.7, val_ratio=0.2, test_ratio=0.1):
+def stratified_split(df, train_ratio=0.7, val_ratio=0.1, test_ratio=0.2):
     df = df.sample(frac=1).reset_index(drop=True)  # Shuffle the data
 
     # Initialize empty DataFrames for train, validation, and test sets
@@ -45,7 +51,11 @@ def stratified_split(df, train_ratio=0.7, val_ratio=0.2, test_ratio=0.1):
 
     # Get the counts of each osm_id in the dataset
     osm_counts = df[['osm_id_1', 'osm_id_2']].stack().value_counts()
-    train_counts = val_counts = test_counts = pd.Series(0, index=osm_counts.index)
+
+    # Initialize individual counts for train, validation, and test sets
+    train_counts = pd.Series(0, index=osm_counts.index)
+    val_counts = pd.Series(0, index=osm_counts.index)
+    test_counts = pd.Series(0, index=osm_counts.index)
 
     def assign_row(row, target_set, target_counts):
         target_set.loc[len(target_set)] = row
@@ -53,13 +63,17 @@ def stratified_split(df, train_ratio=0.7, val_ratio=0.2, test_ratio=0.1):
         target_counts[row['osm_id_2']] += 1
         return target_set, target_counts
 
+    # Iterate over rows and assign them to train/validation/test sets
     for _, row in df.iterrows():
         osm_id_1, osm_id_2 = row['osm_id_1'], row['osm_id_2']
         total_count = osm_counts[osm_id_1] + osm_counts[osm_id_2]
+
+        # Calculate the current ratios for train, val, and test sets
         train_ratio_current = (train_counts[osm_id_1] + train_counts[osm_id_2]) / total_count
         val_ratio_current = (val_counts[osm_id_1] + val_counts[osm_id_2]) / total_count
         test_ratio_current = (test_counts[osm_id_1] + test_counts[osm_id_2]) / total_count
 
+        # Assign the row based on the current ratios
         if train_ratio_current < train_ratio:
             train_set, train_counts = assign_row(row, train_set, train_counts)
         elif val_ratio_current < val_ratio:
@@ -115,7 +129,7 @@ def process_and_save_co_occurrence_matrix(co_occurrence_matrix):
     print("Flattened co-occurrence matrix saved as 'flattened_co_occurrence.csv'.")
 
     # Perform the stratified split (70/20/10)
-    train_df, val_df, test_df = stratified_split(flat_df, train_ratio=0.7, val_ratio=0.2, test_ratio=0.1)
+    train_df, val_df, test_df = stratified_split(flat_df, train_ratio=0.7, val_ratio=0.1, test_ratio=0.2)
 
     # Save both flattened and formatted versions of the train/validation/test sets
     save_split_sets(train_df, val_df, test_df)
