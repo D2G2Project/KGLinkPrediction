@@ -1,0 +1,6 @@
+pyrosm
+shapely
+sqlalchemy
+psycopg2
+#geopandas
+#contextily

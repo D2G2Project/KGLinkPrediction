@@ -1,0 +1,49 @@
+[PrefixDeclaration]
+:		http://www.unibz.it/d2g2/urbankg#
+d2g2:		http://www.unibz.it/d2g2/urbankg#
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xsd:		http://www.w3.org/2001/XMLSchema#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+geo:		http://www.opengis.net/ont/geosparql#
+lgd:		http://linkedgeodata.org/resource/
+lgdo:		http://linkedgeodata.org/ontology/
+
+[MappingDeclaration] @collection [[
+;TODO: Do not get all OSM classes (630k triples)
+mappingId	OSM classes
+target		lgd:entity/{osm_id} a lgdo:{class_name} .
+source		SELECT "osm_id", "class_name"
+			FROM public.entities LEFT JOIN public.classes ON entities.class = classes.class_id::TEXT
+
+mappingId	d2g2:locateAt
+target		lgd:entity/{osm_id} d2g2:locateAt :Region/{osmgrid_id} .
+source		SELECT "osm_id", "osmgrid_id"
+			FROM "entities"
+
+mappingId	d2g2:borderBy
+target		:Region/{id1} d2g2:borderBy :Region/{id2} .
+source		SELECT "id1", "id2"
+			FROM "borderby_table"
+			WHERE borderby = TRUE
+
+;mappingId	d2g2:Region geometry
+;target		:Region/{id} geo:asWKT :{geom_wkt}^^geo:wktLiteral .
+;source		SELECT id1, ST_ASTEXT(id2) AS geom_wkt
+;			FROM "osm_grid_polygons"
+
+mappingId	competitive
+target		lgd:entity/{id1} d2g2:competitive lgd:entity/{id2} .
+source		SELECT "id1", "id2"
+			FROM "business_similarity"
+
+
+
+
+; TODO: Add nearby relation for cells relatively close to each other?
+;mappingId	d2g2:nearBy
+;target		:Region/{gid1} d2g2:nearBy :Region/{gid2} .
+;source		SELECT "gid1", "gid2", "relation"
+;			FROM "region_spatial_relations"
+;			WHERE relation = 'nearby'
+]]
