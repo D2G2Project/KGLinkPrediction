@@ -460,3 +460,11 @@ WHERE t1.class = t2.class
 --                         (SELECT st_collect(geom) FROM entities WHERE class='192' OR class='216'));
 
 
+-- Modifications needed for OSMOnto
+-- First, add the new column
+--ALTER TABLE classes
+--    ADD COLUMN osmonto_class_name VARCHAR;
+
+-- Then, update the new column with the values
+--UPDATE classes
+--SET osmonto_class_name = CONCAT('v_', LOWER(class_name));
